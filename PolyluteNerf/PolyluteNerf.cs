@@ -28,7 +28,7 @@ namespace KnurlBuff
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "OakPrime";
         public const string PluginName = "PolyluteNerf";
-        public const string PluginVersion = "0.1.0";
+        public const string PluginVersion = "1.0.0";
 
         private readonly Dictionary<string, string> DefaultLanguage = new Dictionary<string, string>();
 
@@ -41,9 +41,9 @@ namespace KnurlBuff
                 {
                     ILCursor c = new ILCursor(il);
                     c.TryGotoNext(
-                        x => x.MatchLdobj("voidLightningOrb"),
+                        x => x.MatchLdloc(out _),
                         x => x.MatchLdcI4(3),
-                        x => x.MatchLdobj("itemCount7"),
+                        x => x.MatchLdloc(out _),
                         x => x.MatchMul()
                     );
                     c.Index++;
