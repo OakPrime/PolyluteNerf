@@ -7,10 +7,9 @@ using R2API;
 using R2API.Utils;
 using System.Collections.Generic;
 
-namespace KnurlBuff
+namespace PolyluteNerf
 {
     //Loads R2API Submodules
-    [R2APISubmoduleDependency(nameof(RecalculateStatsAPI))]
     [R2APISubmoduleDependency(nameof(LanguageAPI))]
 
     //This is an example plugin that can be put in BepInEx/plugins/ExamplePlugin/ExamplePlugin.dll to test out.
@@ -28,7 +27,7 @@ namespace KnurlBuff
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "OakPrime";
         public const string PluginName = "PolyluteNerf";
-        public const string PluginVersion = "1.0.0";
+        public const string PluginVersion = "1.1.0";
 
         private readonly Dictionary<string, string> DefaultLanguage = new Dictionary<string, string>();
 
@@ -41,20 +40,34 @@ namespace KnurlBuff
                 {
                     ILCursor c = new ILCursor(il);
                     c.TryGotoNext(
-                        x => x.MatchLdloc(out _),
+                        x => x.MatchLdobj("voidLightningOrb"),
                         x => x.MatchLdcI4(3),
-                        x => x.MatchLdloc(out _),
+                        x => x.MatchLdobj("itemCount7"),
                         x => x.MatchMul()
                     );
                     c.Index++;
                     c.Remove();
                     c.Emit(OpCodes.Ldc_I4_2);
                 };
+                //this.ReplacePolyluteText();
             }
             catch (Exception e)
             {
                 Logger.LogError(e.Message + " - " + e.StackTrace);
             }
         }
+
+        /*private void ReplacePolyluteText()
+        {
+            this.ReplaceString("ITEM_ChainLightningVoid_PICKUP", "Chance to repeatedly strike a single enemy with lightning. <style=cIsVoid>Corrupts all Ukeleles</style>.");
+            this.ReplaceString("ITEM_ChainLightningVoid_DESC", "<style=cIsDamage>25%</style> chance to fire <style=cIsDamage>lightning</style> for <style=cIsDamage>60%</style> TOTAL damage up to <style=cIsDamage>2</style> " +
+                " <style=cStack>(+2 per stack)</style> times. <style=cIsVoid>Corrupts all Ukeleles</style>.");
+        }
+
+        private void ReplaceString(string token, string newText)
+        {
+            this.DefaultLanguage[token] = Language.GetString(token);
+            LanguageAPI.Add(token, newText);
+        }*/
     }
 }
