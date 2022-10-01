@@ -36,38 +36,38 @@ namespace PolyluteNerf
         {
             try
             {
+                /*IL.RoR2.Orbs.VoidLightningOrb.Begin += (il) =>
+                {
+                    ILCursor c = new ILCursor(il);
+                    c.TryGotoNext(
+                        x => x.MatchLdarg(out _),
+                        x => x.MatchLdarg(out _),
+                        x => x.MatchLdfld<RoR2.Orbs.VoidLightningOrb>(nameof(RoR2.Orbs.VoidLightningOrb.totalStrikes)),
+                        x => x.MatchLdcI4(out _)
+                    );
+                    c.Index += 3;
+                    c.RemoveRange(2);
+                };
+                */
                 IL.RoR2.GlobalEventManager.OnHitEnemy += (il) =>
                 {
                     ILCursor c = new ILCursor(il);
                     c.TryGotoNext(
-                        x => x.MatchLdobj("voidLightningOrb"),
-                        x => x.MatchLdcI4(3),
-                        x => x.MatchLdobj("itemCount7"),
-                        x => x.MatchMul()
+                        x => x.MatchLdloc(out _),
+                        x => x.MatchLdcI4(out _),
+                        x => x.MatchLdloc(out _),
+                        x => x.MatchMul(),
+                        x => x.MatchStfld<RoR2.Orbs.VoidLightningOrb>(nameof(RoR2.Orbs.VoidLightningOrb.totalStrikes))
                     );
                     c.Index++;
                     c.Remove();
                     c.Emit(OpCodes.Ldc_I4_2);
                 };
-                //this.ReplacePolyluteText();
             }
             catch (Exception e)
             {
                 Logger.LogError(e.Message + " - " + e.StackTrace);
             }
         }
-
-        /*private void ReplacePolyluteText()
-        {
-            this.ReplaceString("ITEM_ChainLightningVoid_PICKUP", "Chance to repeatedly strike a single enemy with lightning. <style=cIsVoid>Corrupts all Ukeleles</style>.");
-            this.ReplaceString("ITEM_ChainLightningVoid_DESC", "<style=cIsDamage>25%</style> chance to fire <style=cIsDamage>lightning</style> for <style=cIsDamage>60%</style> TOTAL damage up to <style=cIsDamage>2</style> " +
-                " <style=cStack>(+2 per stack)</style> times. <style=cIsVoid>Corrupts all Ukeleles</style>.");
-        }
-
-        private void ReplaceString(string token, string newText)
-        {
-            this.DefaultLanguage[token] = Language.GetString(token);
-            LanguageAPI.Add(token, newText);
-        }*/
     }
 }
