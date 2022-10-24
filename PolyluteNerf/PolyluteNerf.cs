@@ -36,22 +36,17 @@ namespace PolyluteNerf
         {
             try
             {
-                /*IL.RoR2.Orbs.VoidLightningOrb.Begin += (il) =>
-                {
-                    ILCursor c = new ILCursor(il);
-                    c.TryGotoNext(
-                        x => x.MatchLdarg(out _),
-                        x => x.MatchLdarg(out _),
-                        x => x.MatchLdfld<RoR2.Orbs.VoidLightningOrb>(nameof(RoR2.Orbs.VoidLightningOrb.totalStrikes)),
-                        x => x.MatchLdcI4(out _)
-                    );
-                    c.Index += 3;
-                    c.RemoveRange(2);
-                };
-                */
+                
                 IL.RoR2.GlobalEventManager.OnHitEnemy += (il) =>
                 {
                     ILCursor c = new ILCursor(il);
+                    c.TryGotoNext(
+                        x => x.MatchBrfalse(out _),
+                        x => x.MatchLdcR4(0.6f),
+                        x => x.MatchStloc(out _)
+                    );
+                    c.Index++;
+                    c.Next.Operand = 0.4f;
                     c.TryGotoNext(
                         x => x.MatchLdloc(out _),
                         x => x.MatchLdcI4(out _),
@@ -59,15 +54,37 @@ namespace PolyluteNerf
                         x => x.MatchMul(),
                         x => x.MatchStfld<RoR2.Orbs.VoidLightningOrb>(nameof(RoR2.Orbs.VoidLightningOrb.totalStrikes))
                     );
-                    c.Index++;
-                    c.Remove();
-                    c.Emit(OpCodes.Ldc_I4_2);
+                    c.Index += 4;
+                    c.EmitDelegate<Func<int, int>>((totalStrikes) =>
+                    {
+                        if (totalStrikes > 3)
+                        {
+                            return totalStrikes - (totalStrikes / 3) + 1;
+                        }
+                        else
+                        {
+                            return totalStrikes;
+                        }
+                    });
+                    this.ReplacePolyluteText();
                 };
             }
             catch (Exception e)
             {
                 Logger.LogError(e.Message + " - " + e.StackTrace);
-            }
+            }          
+        }
+        private void ReplacePolyluteText()
+        {
+            this.ReplaceString("ITEM_CHAINLIGHTNINGVOID_DESC", "<style=cIsDamage>25%</style> chance to fire <style=cIsDamage>lightning</style>" +
+                "for <style=cIsDamage>40%</style> TOTAL damage up to <style=cIsDamage>3</style> <style=cStack>(+2 per stack)</style>" +
+                "times. <style=cIsVoid>Corrupts all Ukeleles</style>.");
+        }
+
+        private void ReplaceString(string token, string newText)
+        {
+            this.DefaultLanguage[token] = Language.GetString(token);
+            LanguageAPI.Add(token, newText);
         }
     }
 }
