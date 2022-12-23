@@ -66,8 +66,8 @@ namespace PolyluteNerf
                             return totalStrikes;
                         }
                     });
-                    this.ReplacePolyluteText();
                 };
+                this.ReplacePolyluteText();
             }
             catch (Exception e)
             {
