@@ -1,16 +1,12 @@
 using BepInEx;
-using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using RoR2;
 using System;
 using R2API;
-using R2API.Utils;
 using System.Collections.Generic;
 
 namespace PolyluteNerf
 {
-    //Loads R2API Submodules
-    [R2APISubmoduleDependency(nameof(LanguageAPI))]
 
     //This is an example plugin that can be put in BepInEx/plugins/ExamplePlugin/ExamplePlugin.dll to test out.
     //It's a small plugin that adds a relatively simple item to the game, and gives you that item whenever you press F2.
@@ -27,7 +23,7 @@ namespace PolyluteNerf
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "OakPrime";
         public const string PluginName = "PolyluteNerf";
-        public const string PluginVersion = "1.1.0";
+        public const string PluginVersion = "1.1.2";
 
         private readonly Dictionary<string, string> DefaultLanguage = new Dictionary<string, string>();
 
