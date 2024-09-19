@@ -23,7 +23,7 @@ namespace PolyluteNerf
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "OakPrime";
         public const string PluginName = "PolyluteNerf";
-        public const string PluginVersion = "1.1.2";
+        public const string PluginVersion = "1.2.0";
 
         private readonly Dictionary<string, string> DefaultLanguage = new Dictionary<string, string>();
 
@@ -33,16 +33,16 @@ namespace PolyluteNerf
             try
             {
                 
-                IL.RoR2.GlobalEventManager.OnHitEnemy += (il) =>
+                IL.RoR2.GlobalEventManager.ProcessHitEnemy += (il) =>
                 {
                     ILCursor c = new ILCursor(il);
-                    c.TryGotoNext(
+                    /*c.TryGotoNext(
                         x => x.MatchBrfalse(out _),
                         x => x.MatchLdcR4(0.6f),
                         x => x.MatchStloc(out _)
                     );
                     c.Index++;
-                    c.Next.Operand = 0.4f;
+                    c.Next.Operand = 0.5f;*/
                     c.TryGotoNext(
                         x => x.MatchLdloc(out _),
                         x => x.MatchLdcI4(out _),
@@ -53,14 +53,15 @@ namespace PolyluteNerf
                     c.Index += 4;
                     c.EmitDelegate<Func<int, int>>((totalStrikes) =>
                     {
-                        if (totalStrikes > 3)
+                        /*if (totalStrikes > 3)
                         {
                             return totalStrikes - (totalStrikes / 3) + 1;
                         }
                         else
                         {
                             return totalStrikes;
-                        }
+                        }*/
+                        return totalStrikes * 2 / 3;
                     });
                 };
                 this.ReplacePolyluteText();
@@ -72,8 +73,8 @@ namespace PolyluteNerf
         }
         private void ReplacePolyluteText()
         {
-            this.ReplaceString("ITEM_CHAINLIGHTNINGVOID_DESC", "<style=cIsDamage>25%</style> chance to fire <style=cIsDamage>lightning</style>" +
-                "for <style=cIsDamage>40%</style> TOTAL damage up to <style=cIsDamage>3</style> <style=cStack>(+2 per stack)</style>" +
+            this.ReplaceString("ITEM_CHAINLIGHTNINGVOID_DESC", "<style=cIsDamage>25%</style> chance to fire <style=cIsDamage>lightning</style> " +
+                "for <style=cIsDamage>60%</style> TOTAL damage up to <style=cIsDamage>2</style> <style=cStack>(+2 per stack)</style> " +
                 "times. <style=cIsVoid>Corrupts all Ukeleles</style>.");
         }
 
